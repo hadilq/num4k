@@ -1,14 +1,8 @@
-language: kotlin
-
-sudo: false
-
-script:
-  - ./gradlew jvmTest check
-
-notifications:
-  email: false
-
-cache:
-  directories:
-  - $HOME/.m2
-  - $HOME/.gradle
+- os: linux
+  language: java
+  jdk: oraclejdk8
+  env:
+    KBUILD=linux
+    JAVA_OPTS=-Xmx2g
+  script:
+    - ./gradlew -s -i check build
