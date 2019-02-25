@@ -17,6 +17,11 @@ val m = DoubleTensor.create2D {
             default = 0.0
         }
 ```
+To read and write to this tensor, just do this
+```kotlin
+val a = m[0, 2] // read. Notice it's the default value which is the 0.0
+m[0, 1] = 2     // write
+```
 To create a `2D` tensor of `Int` type, just do this
 ```kotlin
 val m = IntTensor.create2D {
