@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/hadilq/num4k.svg?branch=master)](https://travis-ci.org/hadilq/num4k)
+
 Num4K
 ===
 This library is inspired by `numpy` library, but currently just supports tensors.
