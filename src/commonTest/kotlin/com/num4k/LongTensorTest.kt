@@ -249,7 +249,7 @@ class LongTensorTest {
             dimension = intArrayOf(15, 3)
             default = 1
         }
-        val dot = m.dot(n)
+        val dot = m dot n
         assertEquals(dot.rank(), 2)
         val dimension = dot.dimension()
         assertEquals(dimension[0], 6)
