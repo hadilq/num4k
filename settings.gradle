@@ -8,6 +8,3 @@ pluginManagement {
     }
 }
 rootProject.name = 'num4k'
-
-
-enableFeaturePreview('GRADLE_METADATA')
