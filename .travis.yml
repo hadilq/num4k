@@ -3,7 +3,7 @@ language: kotlin
 sudo: false
 
 script:
-  - ./gradlew check
+  - ./gradlew jvmTest check
 
 notifications:
   email: false
