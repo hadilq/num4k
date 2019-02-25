@@ -1,0 +1,14 @@
+language: kotlin
+
+sudo: false
+
+script:
+  - ./gradlew check
+
+notifications:
+  email: false
+
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle
