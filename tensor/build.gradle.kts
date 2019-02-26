@@ -52,14 +52,14 @@ kotlin {
             }
         }
 
-        js {
-            compilations["main"].defaultSourceSet.dependencies {
-                api(kotlin("stdlib-js"))
-            }
-            compilations["test"].defaultSourceSet.dependencies {
-                implementation(kotlin("test-js"))
-            }
-        }
+//        js {
+//            compilations["main"].defaultSourceSet.dependencies {
+//                api(kotlin("stdlib-js"))
+//            }
+//            compilations["test"].defaultSourceSet.dependencies {
+//                implementation(kotlin("test-js"))
+//            }
+//        }
         val nativeMain by creating
 
         configure(listOf(linuxX64(), mingwX64(), macosX64())) {
