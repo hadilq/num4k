@@ -26,7 +26,7 @@ version = "0.0.1"
 
 kotlin {
     jvm()
-    js()
+//    js()
     mingwX64()
     linuxX64()
     macosX64()
