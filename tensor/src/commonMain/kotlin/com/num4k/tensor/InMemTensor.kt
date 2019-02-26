@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.num4k
+package com.num4k.tensor
 
 @Suppress("UNCHECKED_CAST")
 open class InMemTensor<T> private constructor(
@@ -55,7 +55,7 @@ open class InMemTensor<T> private constructor(
     fun data(): Array<Any?> = data.copyOf()
 
     fun <R> map(block: (T?) -> R?): Tensor<R> {
-        val tensor = InMemTensor.create<R> {
+        val tensor = create<R> {
             this dimension dimension()
             this default block(default())
         }

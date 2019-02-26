@@ -15,7 +15,7 @@
  */
 @file:Suppress("ReplaceGetOrSet")
 
-package com.num4k
+package com.num4k.tensor
 
 class DotDoubleTensor(
     private val i: Int,

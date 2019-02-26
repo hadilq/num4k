@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.num4k
+package com.num4k.tensor
 
 class TransposeTensor<T>(private val i: Int, private val j: Int, private val original: Tensor<T>) : Tensor<T>() {
 

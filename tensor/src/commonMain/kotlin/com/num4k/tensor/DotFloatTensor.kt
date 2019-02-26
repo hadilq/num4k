@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.num4k
+package com.num4k.tensor
 
 @Suppress("ReplaceGetOrSet")
 class DotFloatTensor(

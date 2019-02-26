@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.num4k
+package com.num4k.tensor
 
 class TransposeOneDimensionalTensor<T>(private val original: Tensor<T>) : Tensor<T>() {
-
 
     init {
         if (original.rank() != 1) {
             throw IllegalArgumentException("The original tensor must be rank one, but it's ${original.rank()}")
         }
     }
+
     private val d = intArrayOf(1, original.dimension()[0])
 
     override fun get(vararg position: Int): T? {
