@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-pluginManagement {
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "kotlin-multiplatform") {
-                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-            }
-        }
+allprojects {
+    repositories {
+        mavenCentral()
+        maven("https://dl.bintray.com/kotlin/kotlin-dev")
     }
 }
-rootProject.name = 'num4k'
-
-include ':tensor', ':number'
