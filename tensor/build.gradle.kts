@@ -1,3 +1,5 @@
+import groovy.util.Node
+
 /**
  * Copyright 2019 Hadi Lashkari Ghouchani
 
@@ -14,19 +16,17 @@
  * limitations under the License.
  */
 
-import groovy.util.Node
-
 plugins {
     id("org.jetbrains.kotlin.multiplatform").version("1.3.21")
     id("maven-publish")
     id("signing")
 }
-group = "com.github.hadilq"
-version = "0.0.1"
+
+group = findProperty("packagename") as String
+version = findProperty("version") as String
 
 kotlin {
     jvm()
-    js()
     mingwX64()
     linuxX64()
     macosX64()
@@ -52,14 +52,6 @@ kotlin {
             }
         }
 
-//        js {
-//            compilations["main"].defaultSourceSet.dependencies {
-//                api(kotlin("stdlib-js"))
-//            }
-//            compilations["test"].defaultSourceSet.dependencies {
-//                implementation(kotlin("test-js"))
-//            }
-//        }
         val nativeMain by creating
 
         configure(listOf(linuxX64(), mingwX64(), macosX64())) {
@@ -68,36 +60,54 @@ kotlin {
     }
 }
 
-publishing {
-    repositories {
-        maven(uri("$buildDir/repo"))
-    }
-}
-
-// Publishing
-
-//// Add a Javadoc JAR to each publication as required by Maven Central
-
 val javadocJar by tasks.creating(Jar::class) {
     archiveClassifier.value("javadoc")
-    // TODO: instead of a single empty Javadoc JAR, generate real documentation for each module
 }
-
-publishing {
-    publications.withType<MavenPublication>().all {
-        artifact(javadocJar)
-    }
-}
-
-//// The root publication also needs a sources JAR as it does not have one by default
 
 val sourcesJar by tasks.creating(Jar::class) {
     archiveClassifier.value("sources")
 }
 
-publishing.publications.withType<MavenPublication>().getByName("kotlinMultiplatform").artifact(sourcesJar)
+publishing {
+    repositories {
+        maven(uri("$buildDir/repo"))
 
-//// Customize the POMs adding the content required by Maven Central
+        val ossrhUsername = findProperty("ossrhUsername") as String?
+        val ossrhPassword = findProperty("ossrhPassword") as String?
+
+        if (ossrhUsername != null && ossrhPassword != null) {
+
+            maven {
+                name = "repository"
+                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+
+            maven {
+                name = "snapshotRepository"
+                url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+    }
+
+    publications.withType<MavenPublication>().all {
+        signing.sign(this@all)
+
+        artifact(javadocJar)
+
+        customizeForMavenCentral(pom)
+    }
+
+    publications.withType<MavenPublication>().getByName("kotlinMultiplatform").artifact(sourcesJar)
+
+}
 
 fun customizeForMavenCentral(pom: org.gradle.api.publish.maven.MavenPom) = pom.withXml {
     fun Node.add(key: String, value: String) {
@@ -123,7 +133,7 @@ fun customizeForMavenCentral(pom: org.gradle.api.publish.maven.MavenPom) = pom.w
         node("licenses") {
             node("license") {
                 add("name", "Apache License 2.0")
-                add("url", "https://github.com/hadilq/num4k/blob/master/LICENSE")
+                add("url", "http://www.apache.org/licenses/LICENSE-2.0.txt")
                 add("distribution", "repo")
             }
         }
@@ -134,28 +144,10 @@ fun customizeForMavenCentral(pom: org.gradle.api.publish.maven.MavenPom) = pom.w
         }
         node("developers") {
             node("developer") {
-                add("name", "hadilq")
+                add("id", "hadilq")
+                add("name", "Hadi Lashkari Ghouchani")
+                add("email", "hadilq.dev@gmail.com")
             }
         }
-    }
-}
-
-publishing {
-    publications.withType<MavenPublication>().all {
-        customizeForMavenCentral(pom)
-    }
-}
-
-//// Sign the publications:
-
-////// Also requires that signing.keyId, signing.password, and signing.secretKeyRingFile are provided as Gradle
-////// properties.
-
-////// No complex signing configuration is required here, as the signing plugin interoperates with maven-publish
-////// and can simply add the signature files directly to the publications:
-
-publishing {
-    publications.withType<MavenPublication>().all {
-        signing.sign(this@all)
     }
 }

@@ -18,12 +18,12 @@ plugins {
     id("maven-publish")
     id("signing")
 }
-group = "com.github.hadilq"
-version = "0.0.1"
+
+group = findProperty("packagename") as String
+version = findProperty("version") as String
 
 kotlin {
     jvm()
-//    js()
     mingwX64()
     linuxX64()
     macosX64()
@@ -49,14 +49,6 @@ kotlin {
             }
         }
 
-        js {
-            compilations["main"].defaultSourceSet.dependencies {
-                api(kotlin("stdlib-js"))
-            }
-            compilations["test"].defaultSourceSet.dependencies {
-                implementation(kotlin("test-js"))
-            }
-        }
         val nativeMain by creating
 
         configure(listOf(linuxX64(), mingwX64(), macosX64())) {
