@@ -7,7 +7,7 @@ class IntTensorTestJS {
 
     @Test
     fun create2DColumn() {
-        val m = InMemTensor.create2D<Int> {
+        val m = IntTensor.create2D {
             columns = 3
             this default 0
         }
