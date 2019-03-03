@@ -15,6 +15,7 @@
  */
 package com.num4k.tensor
 
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -23,6 +24,7 @@ import kotlin.test.assertTrue
 class InMemTensorTest {
 
     @Test
+    @JsName("create2D_column")
     fun `create2D column`() {
         val m = InMemTensor.create2D<Int> {
             columns = 3
@@ -38,6 +40,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("create2D_row")
     fun `create2D row`() {
         val m = InMemTensor.create2D<Int> {
             rows = 3
@@ -52,6 +55,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("test_2D_set_get")
     fun `2D set get`() {
         val m = InMemTensor.create2D<Int> {
             this rows 4
@@ -64,6 +68,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("test_2D_negative_column")
     fun `2D negative column`() {
         try {
             InMemTensor.create2D<Int> {
@@ -79,6 +84,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("test_2D_get_negative_position")
     fun `2D get negative position`() {
         val m = InMemTensor.create2D<Int> {
             this rows 4
@@ -95,6 +101,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("test_2D_set_negative_position")
     fun `2D set negative position`() {
         val m = InMemTensor.create2D<Int> {
             this rows 4
@@ -111,6 +118,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("create1D")
     fun create1D() {
         val m = InMemTensor.create1D<Int> {
             this rows 3
@@ -123,6 +131,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("create1D_first_element")
     fun `create1D first element`() {
         val m = InMemTensor.create1D<Int> {
             rows = 1
@@ -134,6 +143,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("create1D_last_element")
     fun `create1D last element`() {
         val m = InMemTensor.create1D<Int> {
             rows = 10
@@ -147,6 +157,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("create")
     fun create() {
         val m = InMemTensor.create<Int> {
             this dimension intArrayOf(2, 4, 6)
@@ -162,6 +173,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("first_element")
     fun `first element`() {
         val m = InMemTensor.create<Int> {
             this dimension intArrayOf(2, 4, 6)
@@ -174,6 +186,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("last_element")
     fun `last element`() {
         val m = InMemTensor.create<Int> {
             dimension = intArrayOf(2, 4, 6)
@@ -187,6 +200,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("map")
     fun map() {
         val m = InMemTensor.create<Int> {
             dimension = intArrayOf(2, 4, 6)
@@ -205,6 +219,7 @@ class InMemTensorTest {
     }
 
     @Test
+    @JsName("for_each")
     fun `for each`() {
         val m = InMemTensor.create<Int> {
             dimension = intArrayOf(2, 4, 6)

@@ -15,6 +15,7 @@
  */
 package com.num4k.tensor
 
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -23,6 +24,7 @@ import kotlin.test.assertTrue
 class LongTensorTest {
 
     @Test
+    @JsName("create2D_column")
     fun `create2D column`() {
         val m = LongTensor.create2D {
             columns = 3
@@ -38,6 +40,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("create2D_row")
     fun `create2D row`() {
         val m = LongTensor.create2D {
             rows = 3
@@ -52,6 +55,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("test_2D_set_get")
     fun `2D set get`() {
         val m = LongTensor.create2D {
             this rows 4
@@ -64,6 +68,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("test_2D_negative_column")
     fun `2D negative column`() {
         try {
             LongTensor.create2D {
@@ -79,6 +84,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("test_2D_get_negative_position")
     fun `2D get negative position`() {
         val m = LongTensor.create2D {
             this rows 4
@@ -95,6 +101,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("test_2D_set_negative_position")
     fun `2D set negative position`() {
         val m = LongTensor.create2D {
             this rows 4
@@ -111,6 +118,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("create1D")
     fun create1D() {
         val m = LongTensor.create1D {
             this rows 3
@@ -123,6 +131,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("create1D_first_element")
     fun `create1D first element`() {
         val m = LongTensor.create1D {
             rows = 1
@@ -134,6 +143,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("create1D_last_element")
     fun `create1D last element`() {
         val m = LongTensor.create1D {
             rows = 10
@@ -147,6 +157,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("create")
     fun create() {
         val m = LongTensor.create {
             this dimension intArrayOf(2, 4, 6)
@@ -162,6 +173,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("first_element")
     fun `first element`() {
         val m = LongTensor.create {
             this dimension intArrayOf(2, 4, 6)
@@ -174,6 +186,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("last_element")
     fun `last element`() {
         val m = LongTensor.create {
             dimension = intArrayOf(2, 4, 6)
@@ -187,6 +200,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("to_long_tensor")
     fun `to long tensor`() {
         val m = InMemTensor.create<Long> {
             dimension = intArrayOf(2, 4, 5)
@@ -202,6 +216,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("to_typed_tensor")
     fun `to typed tensor`() {
         val m = LongTensor.create {
             dimension = intArrayOf(2, 15, 6)
@@ -218,6 +233,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("dot")
     fun dot() {
         val m = LongTensor.create {
             dimension = intArrayOf(6, 8, 4, 7)
@@ -240,6 +256,7 @@ class LongTensorTest {
     }
 
     @Test
+    @JsName("dot_2D")
     fun `dot 2D`() {
         val m = LongTensor.create {
             dimension = intArrayOf(6, 15)

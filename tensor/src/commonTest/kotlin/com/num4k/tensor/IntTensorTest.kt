@@ -15,6 +15,7 @@
  */
 package com.num4k.tensor
 
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -23,6 +24,7 @@ import kotlin.test.assertTrue
 class IntTensorTest {
 
     @Test
+    @JsName("create2D_column")
     fun `create2D column`() {
         val m = IntTensor.create2D {
             columns = 3
@@ -38,6 +40,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("create2D_row")
     fun `create2D row`() {
         val m = IntTensor.create2D {
             rows = 3
@@ -52,6 +55,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("test_2D_set_get")
     fun `2D set get`() {
         val m = IntTensor.create2D {
             this rows 4
@@ -64,6 +68,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("test_2D_negative_column")
     fun `2D negative column`() {
         try {
             IntTensor.create2D {
@@ -79,6 +84,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("test_2D_get_negative_position")
     fun `2D get negative position`() {
         val m = IntTensor.create2D {
             this rows 4
@@ -95,6 +101,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("test_2D_set_negative_position")
     fun `2D set negative position`() {
         val m = IntTensor.create2D {
             this rows 4
@@ -111,6 +118,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("create1D")
     fun create1D() {
         val m = IntTensor.create1D {
             this rows 3
@@ -123,6 +131,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("create1D_first_element")
     fun `create1D first element`() {
         val m = IntTensor.create1D {
             rows = 1
@@ -134,6 +143,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("create1D_last_element")
     fun `create1D last element`() {
         val m = IntTensor.create1D {
             rows = 10
@@ -147,6 +157,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("create")
     fun create() {
         val m = IntTensor.create {
             this dimension intArrayOf(2, 4, 6)
@@ -162,6 +173,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("first_element")
     fun `first element`() {
         val m = IntTensor.create {
             this dimension intArrayOf(2, 4, 6)
@@ -174,6 +186,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("last_element")
     fun `last element`() {
         val m = IntTensor.create {
             dimension = intArrayOf(2, 4, 6)
@@ -187,6 +200,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("to_int_tensor")
     fun `to int tensor`() {
         val m = InMemTensor.create<Int> {
             dimension = intArrayOf(2, 4, 5)
@@ -202,6 +216,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("to_typed_tensor")
     fun `to typed tensor`() {
         val m = IntTensor.create {
             dimension = intArrayOf(2, 15, 6)
@@ -218,6 +233,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("dot")
     fun dot() {
         val m = IntTensor.create {
             dimension = intArrayOf(6, 8, 4, 7)
@@ -240,6 +256,7 @@ class IntTensorTest {
     }
 
     @Test
+    @JsName("dot_2D")
     fun `dot 2D`() {
         val m = IntTensor.create {
             dimension = intArrayOf(6, 15)

@@ -15,12 +15,14 @@
  */
 package com.num4k.tensor
 
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TransposeTensorTest {
 
     @Test
+    @JsName("test_2D_transpose")
     fun `2D transpose`() {
         val t = InMemTensor.create2D<Int>().transpose()
         assertEquals(t.rank(), 2)
@@ -29,6 +31,7 @@ class TransposeTensorTest {
     }
 
     @Test
+    @JsName("test_2D_rectangle_transpose")
     fun `2D rectangle transpose`() {
         val t = InMemTensor.create2D<Int> {
             this rows 2
@@ -40,6 +43,7 @@ class TransposeTensorTest {
     }
 
     @Test
+    @JsName("test_2D_rectangle_transpose_set_get")
     fun `2D rectangle transpose set get`() {
         val t = InMemTensor.create2D<Int> {
             this rows 2
@@ -53,6 +57,7 @@ class TransposeTensorTest {
     }
 
     @Test
+    @JsName("test_3D_rectangle_transpose_set_get")
     fun `3D rectangle transpose set get`() {
         val t = InMemTensor.create<Int> {
             this dimension intArrayOf(3, 5, 2)
@@ -65,6 +70,7 @@ class TransposeTensorTest {
     }
 
     @Test
+    @JsName("transpose_of_one_dimensional_Tensor")
     fun `transpose of one dimensional Tensor`() {
         val t = InMemTensor.create1D<Int> {
             rows = 7
