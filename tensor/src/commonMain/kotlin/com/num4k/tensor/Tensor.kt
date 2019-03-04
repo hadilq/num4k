@@ -60,4 +60,16 @@ abstract class Tensor<T> {
             iterate(block, dimension, position, iterOn + 1)
         }
     }
+
+    fun <R> map(block: (T?) -> R?): Tensor<R> {
+        val tensor = InMemTensor.create<R> {
+            this dimension dimension()
+            this default block(default())
+        }
+        forEachIndexed { position, value ->
+            tensor.set(block(value), position)
+        }
+        return tensor
+    }
+
 }
