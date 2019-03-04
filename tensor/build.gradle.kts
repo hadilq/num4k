@@ -28,7 +28,6 @@ plugins {
 }
 
 group = Versions.group
-base.archivesBaseName = "num4k-tensor"
 version = Versions.version
 
 kotlin {
@@ -155,7 +154,7 @@ if (listOf(
             withType<MavenPublication>()["kotlinMultiplatform"].artifact(sourcesJar)
         }
         repositories {
-            maven(url = "https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
                 .credentials {
                     username = ossrhUsername
                     password = ossrhPassword

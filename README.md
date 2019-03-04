@@ -76,7 +76,15 @@ val n = DoubleTensor.create {
 // Fill m and n here
 val dot = m.dot(1, 2, n) // sum over 8 elements of dimension[1] of m and dimension[2] of n
 ```
+To transpose a 2D tensor, just do this
+```kotlin
+val t = InMemTensor.create2D<Int>().transpose()
+```
 And many other usages.
+
+Download
+---
+Snapshots of the development version are available in [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots).
 
 TODO
 ---
