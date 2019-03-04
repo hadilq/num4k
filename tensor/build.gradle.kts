@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.konan.target.KonanTarget
 import java.util.Properties
 
 plugins {
-    kotlin("multiplatform") version "1.3.21"
+    kotlin("multiplatform") version Versions.kotlinVersion
     id("maven-publish")
     id("signing")
 }
@@ -171,47 +171,8 @@ if (listOf(
     appendln("ossrhPassword: ${if (ossrhPassword == null) "NOT " else ""}found")
 })
 
-fun customizeForMavenCentral(pom: org.gradle.api.publish.maven.MavenPom) = pom.buildAsNode {
-    add("description", "Modularized, mathematical and multiplatform Kotlin library")
-    add("name", "Num4K")
-    add("url", "https://github.com/hadilq/num4k")
-    node("organization") {
-        add("name", "com.github.hadilq")
-        add("url", "https://github.com/hadilq")
-    }
-    node("issueManagement") {
-        add("system", "github")
-        add("url", "https://github.com/hadilq/num4k/issues")
-    }
-    node("licenses") {
-        node("license") {
-            add("name", "Apache License 2.0")
-            add("url", "http://www.apache.org/licenses/LICENSE-2.0.txt")
-            add("distribution", "repo")
-        }
-    }
-    node("scm") {
-        add("url", "https://github.com")
-        add("connection", "scm:git:git://github.com/hadilq/num4k.git")
-        add("developerConnection", "scm:git:ssh://github.com/hadilq/num4k.git/lamba92/kotlin-extlib.git")
-    }
-    node("developers") {
-        node("developer") {
-            add("id", "hadilq")
-            add("name", "Hadi Lashkari Ghouchani")
-            add("email", "hadilq.dev@gmail.com")
-        }
-    }
-}
-
 fun KotlinNativeTarget.compilations(name: String, config: KotlinNativeCompilation.() -> Unit) =
     compilations[name].apply(config)
-
-fun properties(file: File)
-        = Properties().apply { load(file.apply { if (!exists()) createNewFile() }.inputStream()) }
-
-fun properties(fileSrc: String)
-        = properties(file(fileSrc))
 
 val KotlinMultiplatformExtension.nativeTargets
     get() = targets.filter { it is KotlinNativeTarget }.map { it as KotlinNativeTarget }
@@ -248,15 +209,3 @@ val KotlinMultiplatformExtension.androidTargets
             KonanTarget.ANDROID_ARM64
         ).any { target -> it.konanTarget == target }
     }
-
-fun Node.add(key: String, value: String)
-        = appendNode(key).setValue(value)
-
-fun Node.node(key: String, content: Node.() -> Unit)
-        = appendNode(key).also(content)
-
-fun org.gradle.api.publish.maven.MavenPom.buildAsNode(builder: Node.() -> Unit)
-        = withXml { asNode().apply(builder) }
-
-fun ExtraPropertiesExtension.getOrNull(name: String)
-        = if(has(name)) get(name) else null

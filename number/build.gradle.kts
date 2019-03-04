@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.konan.target.KonanTarget
 import java.util.Properties
 
 plugins {
-    kotlin("multiplatform") version "1.3.21"
+    kotlin("multiplatform") version Versions.kotlinVersion
     id("maven-publish")
     id("signing")
 }
@@ -112,12 +112,6 @@ kotlin {
 fun KotlinNativeTarget.compilations(name: String, config: KotlinNativeCompilation.() -> Unit) =
     compilations[name].apply(config)
 
-fun properties(file: File)
-        = Properties().apply { load(file.apply { if (!exists()) createNewFile() }.inputStream()) }
-
-fun properties(fileSrc: String)
-        = properties(file(fileSrc))
-
 val KotlinMultiplatformExtension.nativeTargets
     get() = targets.filter { it is KotlinNativeTarget }.map { it as KotlinNativeTarget }
 
@@ -153,15 +147,3 @@ val KotlinMultiplatformExtension.androidTargets
             KonanTarget.ANDROID_ARM64
         ).any { target -> it.konanTarget == target }
     }
-
-fun Node.add(key: String, value: String)
-        = appendNode(key).setValue(value)
-
-fun Node.node(key: String, content: Node.() -> Unit)
-        = appendNode(key).also(content)
-
-fun org.gradle.api.publish.maven.MavenPom.buildAsNode(builder: Node.() -> Unit)
-        = withXml { asNode().apply(builder) }
-
-fun ExtraPropertiesExtension.getOrNull(name: String)
-        = if(has(name)) get(name) else null

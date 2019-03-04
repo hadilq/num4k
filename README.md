@@ -84,7 +84,7 @@ And many other usages.
 
 Download
 ---
-Snapshots of the development version are available in [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots).
+Snapshots of the development version are available in [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/com/github/hadilq/num4k).
 
 TODO
 ---

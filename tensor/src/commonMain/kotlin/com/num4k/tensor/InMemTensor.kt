@@ -54,17 +54,6 @@ open class InMemTensor<T> private constructor(
 
     fun data(): Array<Any?> = data.copyOf()
 
-    fun <R> map(block: (T?) -> R?): Tensor<R> {
-        val tensor = create<R> {
-            this dimension dimension()
-            this default block(default())
-        }
-        forEachIndexed { position, value ->
-            tensor.set(block(value), position)
-        }
-        return tensor
-    }
-
     companion object {
         fun <T> create1D(init: Builder1D<T>.() -> Unit = {}): InMemTensor<T> = Builder1D(init).build()
 
