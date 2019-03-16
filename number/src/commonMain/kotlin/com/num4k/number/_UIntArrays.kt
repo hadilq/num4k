@@ -22,6 +22,9 @@ fun UIntArray.additiveInverses(size: Int) = FieldOperators.additiveInverses(this
 fun UIntArray.integerToString() = FieldOperators.integerToString(this)
 
 @ExperimentalUnsignedTypes
+fun UIntArray.equalsInteger(other: UIntArray) = FieldOperators.equalsInteger(this, other)
+
+@ExperimentalUnsignedTypes
 fun UIntArray.compareToZero() = FieldOperators.compareToZero(this)
 
 @ExperimentalUnsignedTypes

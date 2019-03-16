@@ -4,8 +4,10 @@ package com.num4k.number
 class BigIntegerImpl(
     value: UIntArray
 ) : BigInteger(value) {
+
     override val additiveIdentity: BigInteger
         get() = BigInteger.valueOf(0)
+
     override val multiplicativeIdentity: BigInteger
         get() = BigInteger.valueOf(1)
 
@@ -77,24 +79,7 @@ class BigIntegerImpl(
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as BigIntegerImpl
-
-        val bigger = if (value.size > other.value.size) value else other.value
-        var smaller = if (value.size > other.value.size) other.value else value
-
-        if (smaller.compareToZero() < 0) {
-            smaller = smaller.additiveInverses().additiveInverses(bigger.size)
-        }
-
-        (0 until smaller.size).forEach { index ->
-            if (smaller[index] != bigger[index]) return false
-        }
-
-        (smaller.size until bigger.size).forEach { index ->
-            if (bigger[index] != 0u) return false
-        }
-
-        return true
+        return value.equalsInteger((other as BigInteger).value)
     }
 
     override fun hashCode(): Int = value.hashCode()
