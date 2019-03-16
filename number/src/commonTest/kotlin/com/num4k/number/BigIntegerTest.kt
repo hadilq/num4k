@@ -48,7 +48,7 @@ class BigIntegerTest {
         val b = BigInteger.valueOf(1)
         try {
             a + b
-        } catch (ignore: IllegalStateException) {
+        } catch (ignore: ArithmeticException) {
             return
         }
         throw AssertionError("Failed")
@@ -60,7 +60,7 @@ class BigIntegerTest {
         val b = BigInteger.valueOf(-1)
         try {
             a + b
-        } catch (ignore: IllegalStateException) {
+        } catch (ignore: ArithmeticException) {
             return
         }
         throw AssertionError("Failed")
@@ -96,7 +96,7 @@ class BigIntegerTest {
         val b = BigInteger.valueOf(1L)
         try {
             a + b
-        } catch (ignore: IllegalStateException) {
+        } catch (ignore: ArithmeticException) {
             return
         }
         throw AssertionError("Failed")
@@ -108,7 +108,7 @@ class BigIntegerTest {
         val b = BigInteger.valueOf(-1L)
         try {
             a + b
-        } catch (ignore: IllegalStateException) {
+        } catch (ignore: ArithmeticException) {
             return
         }
         throw AssertionError("Failed")
@@ -197,4 +197,113 @@ class BigIntegerTest {
         val a = BigInteger.valueOf("-4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B")
         assertEquals("-4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B", a.toString())
     }
+
+    @Test
+    fun times() {
+        val a = BigInteger.valueOf(3)
+        val b = BigInteger.valueOf(4)
+        val c = a * b
+        assertEquals(BigInteger.valueOf(12), c)
+    }
+
+    @Test
+    fun timesOne() {
+        val a =
+            BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B")
+        val b = BigInteger.valueOf(1)
+        val c = a * b
+        assertEquals(
+            BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B"),
+            c
+        )
+    }
+
+    @Test
+    fun timesNegative() {
+        val a = BigInteger.valueOf(3)
+        val b = BigInteger.valueOf(-4)
+        val c = a * b
+        assertEquals(BigInteger.valueOf(-12), c)
+    }
+
+    @Test
+    fun timesNegativeBoth() {
+        val a = BigInteger.valueOf(-3)
+        val b = BigInteger.valueOf(-4)
+        val c = a * b
+        assertEquals(BigInteger.valueOf(12), c)
+    }
+
+    @Test
+    fun timesMaxOverflow() {
+        val a = BigInteger.valueOf(Int.MAX_VALUE)
+        val b = BigInteger.valueOf(2)
+        try {
+            a * b
+        } catch (ignore: ArithmeticException) {
+            return
+        }
+        throw AssertionError("Failed")
+    }
+
+    @Test
+    fun timesMinOverflow() {
+        val a = BigInteger.valueOf(Int.MIN_VALUE)
+        val b = BigInteger.valueOf(2)
+        try {
+            a * b
+        } catch (ignore: ArithmeticException) {
+            return
+        }
+        throw AssertionError("Failed")
+    }
+
+    @Test
+    fun longTimes() {
+        val a = BigInteger.valueOf(3L)
+        val b = BigInteger.valueOf(4L)
+        val c = a * b
+        assertEquals(BigInteger.valueOf(12), c)
+    }
+
+    @Test
+    fun longTimesNegative() {
+        val a = BigInteger.valueOf(3L)
+        val b = BigInteger.valueOf(-4L)
+        val c = a * b
+        assertEquals(BigInteger.valueOf(-12), c)
+    }
+
+    @Test
+    fun longTimesNegativeBoth() {
+        val a = BigInteger.valueOf(-3L)
+        val b = BigInteger.valueOf(-4L)
+        val c = a * b
+        assertEquals(BigInteger.valueOf(12), c)
+    }
+
+    @Test
+    fun longMaxTimesOverflow() {
+        val a = BigInteger.valueOf(Long.MAX_VALUE)
+        val b = BigInteger.valueOf(2)
+        try {
+            a * b
+        } catch (ignore: ArithmeticException) {
+            return
+        }
+        throw AssertionError("Failed")
+    }
+
+    @Test
+    fun longMinTimesOverflow() {
+        val a = BigInteger.valueOf(Long.MIN_VALUE)
+        val b = BigInteger.valueOf(2)
+        try {
+            a * b
+        } catch (ignore: ArithmeticException) {
+            return
+        }
+        throw AssertionError("Failed")
+    }
+
 }

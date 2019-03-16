@@ -11,18 +11,23 @@ object FieldOperators {
     fun plusInteger(first: UIntArray, second: UIntArray): UIntArray {
         val condition = first.size >= second.size
         val bigger = if (condition) first else second
-        val smaller = if (condition) second else first
+        val smaller = (if (condition) second else first).let {
+            if (it.compareToZero() < 0) {
+                it.additiveInverses().additiveInverses(bigger.size)
+            } else {
+                it
+            }
+        }
         val digits = UIntArray(bigger.size)
         var carry = 0uL
         bigger.forEachIndexed { index, v ->
-            carry = v.toULong() + carry + if (index >= smaller.size) {
+            carry += v.toULong() + if (index >= smaller.size) {
                 0uL
             } else {
                 smaller[index].toULong()
             }
             digits[index] = (carry and 0xFFFFFFFFu).toUInt()
             carry = (carry shr 32)
-
         }
         val biggerSign = bigger.compareToZero()
         val smallerSign = smaller.compareToZero()
@@ -30,7 +35,7 @@ object FieldOperators {
         if ((biggerSign > 0 && smallerSign > 0 && resultSign < 0) ||
             (biggerSign < 0 && smallerSign < 0 && resultSign > 0)
         ) {
-            throw IllegalStateException(
+            throw ArithmeticException(
                 "Overflow on sum on ${bigger.integerToString()} and ${smaller.integerToString()} " +
                         "with $carry carry and the sign of result is $resultSign"
             )
@@ -140,5 +145,58 @@ object FieldOperators {
             }
         }
         return 0
+    }
+
+    fun multiplicativeInverses(a: UIntArray, size: Int): UIntArray = UIntArray(size)
+
+    fun timesInteger(first: UIntArray, second: UIntArray): UIntArray {
+        val condition = first.size >= second.size
+        val bigger = if (condition) first else second
+        val smaller = (if (condition) second else first).let {
+            if (it.compareToZero() < 0) {
+                it.additiveInverses().additiveInverses(bigger.size)
+            } else {
+                it
+            }
+        }
+        var sumDigits = UIntArray(bigger.size)
+        var multiDigits = UIntArray(bigger.size)
+        var carry = 0uL
+        smaller.forEachIndexed { si, v ->
+            run multiply@{
+                bigger.forEachIndexed { bi, u ->
+                    carry += v.toULong() * u.toULong()
+                    if (si + bi >= bigger.size) {
+                        return@multiply
+                    }
+                    multiDigits[si + bi] = (carry and 0xFFFFFFFFu).toUInt()
+                    carry = (carry shr 32)
+                }
+            }
+
+            sumDigits = sumDigits.plusInteger(multiDigits)
+            multiDigits = UIntArray(bigger.size)
+            carry = 0uL
+        }
+
+        val biggerSign = bigger.compareToZero()
+        val smallerSign = smaller.compareToZero()
+        val resultSign = sumDigits.compareToZero()
+        if ((biggerSign > 0 && smallerSign > 0 && resultSign <= 0) ||
+            (biggerSign < 0 && smallerSign > 0 && resultSign >= 0) ||
+            (biggerSign > 0 && smallerSign < 0 && resultSign >= 0) ||
+            (biggerSign < 0 && smallerSign < 0 && resultSign <= 0)
+        ) {
+            throw ArithmeticException(
+                "Overflow on multiplying on ${bigger.integerToString()} and ${smaller.integerToString()} " +
+                        "with $carry carry"
+            )
+        }
+
+        return sumDigits
+    }
+
+    fun divInteger(first: UIntArray, second: UIntArray): UIntArray {
+        TODO()
     }
 }

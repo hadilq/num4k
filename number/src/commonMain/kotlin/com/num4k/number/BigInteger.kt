@@ -5,23 +5,18 @@ class BigInteger(
     val value: UIntArray
 ) : Field<BigInteger>, Number(), Comparable<BigInteger> {
     override val additiveIdentity: BigInteger
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = BigInteger.valueOf(0)
     override val multiplicativeIdentity: BigInteger
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = BigInteger.valueOf(1)
 
     override fun additiveInverses(): BigInteger = BigInteger(FieldOperators.additiveInverses(value, value.size))
 
-    override fun multiplicativeInverses(): BigInteger {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun multiplicativeInverses(): BigInteger =
+        BigInteger(FieldOperators.multiplicativeInverses(value, value.size))
 
-    override fun times(o: BigInteger): BigInteger {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun times(o: BigInteger): BigInteger = BigInteger(value.timesInteger(o.value))
 
-    override fun div(o: BigInteger): BigInteger {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun div(o: BigInteger): BigInteger = BigInteger(value.divInteger(o.value))
 
     override fun minus(o: BigInteger): BigInteger = BigInteger(value.minusInteger(o.value))
 

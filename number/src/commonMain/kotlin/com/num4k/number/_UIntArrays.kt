@@ -7,6 +7,12 @@ fun UIntArray.plusInteger(o: UIntArray) = FieldOperators.plusInteger(this, o)
 fun UIntArray.minusInteger(o: UIntArray) = FieldOperators.minusInteger(this, o)
 
 @ExperimentalUnsignedTypes
+fun UIntArray.timesInteger(o: UIntArray) = FieldOperators.timesInteger(this, o)
+
+@ExperimentalUnsignedTypes
+fun UIntArray.divInteger(o: UIntArray) = FieldOperators.divInteger(this, o)
+
+@ExperimentalUnsignedTypes
 fun UIntArray.additiveInverses() = FieldOperators.additiveInverses(this)
 
 @ExperimentalUnsignedTypes
