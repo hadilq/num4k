@@ -15,6 +15,18 @@ class BigIntegerTest {
     }
 
     @Test
+    fun plusZero() {
+        val a =
+            BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B")
+        val b = BigInteger.valueOf(0)
+        val c = a + b
+        assertEquals(
+            BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B"),
+            c
+        )
+    }
+
+    @Test
     fun plusNegative() {
         val a = BigInteger.valueOf(3)
         val b = BigInteger.valueOf(-4)
@@ -35,7 +47,7 @@ class BigIntegerTest {
         val a = BigInteger.valueOf(Int.MAX_VALUE)
         val b = BigInteger.valueOf(1)
         try {
-            val c = a + b
+            a + b
         } catch (ignore: IllegalStateException) {
             return
         }
@@ -47,7 +59,7 @@ class BigIntegerTest {
         val a = BigInteger.valueOf(Int.MIN_VALUE)
         val b = BigInteger.valueOf(-1)
         try {
-            val c = a + b
+            a + b
         } catch (ignore: IllegalStateException) {
             return
         }
@@ -83,7 +95,7 @@ class BigIntegerTest {
         val a = BigInteger.valueOf(Long.MAX_VALUE)
         val b = BigInteger.valueOf(1L)
         try {
-            val c = a + b
+            a + b
         } catch (ignore: IllegalStateException) {
             return
         }
@@ -95,7 +107,7 @@ class BigIntegerTest {
         val a = BigInteger.valueOf(Long.MIN_VALUE)
         val b = BigInteger.valueOf(-1L)
         try {
-            val c = a + b
+            a + b
         } catch (ignore: IllegalStateException) {
             return
         }

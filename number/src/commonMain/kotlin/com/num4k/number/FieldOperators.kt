@@ -5,7 +5,8 @@ import kotlin.math.max
 @ExperimentalUnsignedTypes
 object FieldOperators {
 
-    private val hexArray = "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F".split(",").toTypedArray()
+    private val HEX_ARRAY = "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F".split(",").toTypedArray()
+    private val SIGN_MASK = 1u shl 31
 
     fun plusInteger(first: UIntArray, second: UIntArray): UIntArray {
         val condition = first.size >= second.size
@@ -31,7 +32,7 @@ object FieldOperators {
         ) {
             throw IllegalStateException(
                 "Overflow on sum on ${bigger.integerToString()} and ${smaller.integerToString()} " +
-                        "with $carry carry, $biggerSign biggerSign, $smallerSign smallerSign and $resultSign resultSign"
+                        "with $carry carry and the sign of result is $resultSign"
             )
         }
         return digits
@@ -70,19 +71,23 @@ object FieldOperators {
 
     fun integerValueOf(s: String): UIntArray {
         var ss = s
-        val sign = if (s[0] == '-') {
-            ss = s.removePrefix("-")
-            false
-        } else if (s[0] == '+') {
-            ss = s.removePrefix("+")
-            true
-        } else true
+        val sign = when {
+            s[0] == '-' -> {
+                ss = s.removePrefix("-")
+                false
+            }
+            s[0] == '+' -> {
+                ss = s.removePrefix("+")
+                true
+            }
+            else -> true
+        }
 
         val result = ArrayList<UInt>()
         ss.reversed().chunked(8).forEach { d ->
             var u = 0u
             d.forEachIndexed { i, c ->
-                val index = hexArray.indexOf(c.toString())
+                val index = HEX_ARRAY.indexOf(c.toString())
                 if (index == -1) {
                     throw NumberFormatException("Cannot parse $c to a hex number")
                 }
@@ -121,17 +126,17 @@ object FieldOperators {
         var vs = ""
         var vv = v
         repeat((0 until 8).count()) {
-            vs = hexArray[(vv and 0xFu).toInt()] + vs
+            vs = HEX_ARRAY[(vv and 0xFu).toInt()] + vs
             vv = vv shr 4
         }
         return vs
     }
 
+
     fun compareToZero(i: UIntArray): Int {
         i.forEach { v ->
             if (v != 0u) {
-                val sign = 1u shl 31
-                return if (i[i.size - 1] and sign == sign) -1 else 1
+                return if (i[i.size - 1] and SIGN_MASK == SIGN_MASK) -1 else 1
             }
         }
         return 0
