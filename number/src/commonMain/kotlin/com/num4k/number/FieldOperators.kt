@@ -158,33 +158,26 @@ object FieldOperators {
             firstSign == 0 && secondSign < 0 -> 1
             firstSign == 0 && secondSign > 0 -> -1
             firstSign == 0 && secondSign == 0 -> 0
-            else -> {
+            else -> run {
                 val condition = first.size >= second.size
                 val bigger = if (condition) first else second
                 val smaller = (if (condition) second else first).let { smaller ->
                     if (smaller.compareToZero() < 0) {
                         smaller.additiveInverses().additiveInverses(bigger.size)
                     } else {
-                        UIntArray(bigger.size) { index ->
-                            if (index < smaller.size) {
-                                smaller[index]
-                            } else {
-                                0u
-                            }
-                        }
+                        smaller
                     }
                 }
-                run {
-                    bigger.reversed().forEachIndexed { index, v ->
-                        val u = smaller[smaller.size - 1 - index]
-                        if (v > u) {
-                            return@run if (condition) 1 else -1
-                        } else if (u > v) {
-                            return@run if (condition) -1 else 1
-                        }
+
+                bigger.reversed().forEachIndexed { index, v ->
+                    val u = if (index < bigger.size - smaller.size) 0u else smaller[bigger.size - 1 - index]
+                    if (v > u) {
+                        return@run if (condition) 1 else -1
+                    } else if (u > v) {
+                        return@run if (condition) -1 else 1
                     }
-                    0
                 }
+                0
             }
         }
     }
@@ -224,8 +217,8 @@ object FieldOperators {
                 it
             }
         }
+        val multiDigits = UIntArray(bigger.size)
         var sumDigits = UIntArray(bigger.size)
-        var multiDigits = UIntArray(bigger.size)
         var carry = 0uL
         smaller.forEachIndexed { si, v ->
             run multiply@{
@@ -240,7 +233,7 @@ object FieldOperators {
             }
 
             sumDigits = sumDigits.plusInteger(multiDigits)
-            multiDigits = UIntArray(bigger.size)
+            (0 until bigger.size).forEach { index -> multiDigits[index] = 0u }
             carry = 0uL
         }
 
