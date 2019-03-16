@@ -36,7 +36,7 @@ class JvmBigIntegerTest {
     fun plusDifferentSignHighPrecision() {
         val s = "-4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B"
         val t = "4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B"
-        val ak = BigInteger.valueOf(s) + BigInteger(UIntArray(15))
+        val ak = BigInteger.valueOf(s) + BigInteger.valueOf(UIntArray(15))
         val aj = java.math.BigInteger(s, 16)
         val bk = BigInteger.valueOf(t)
         val bj = java.math.BigInteger(t, 16)
@@ -49,7 +49,7 @@ class JvmBigIntegerTest {
     fun times() {
         val s = "4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B"
         val t = "4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B"
-        val ak = BigInteger.valueOf(s) + BigInteger(UIntArray(40)) // Increase the precision to avoid overflow
+        val ak = BigInteger.valueOf(s) + BigInteger.valueOf(UIntArray(40)) // Increase the precision to avoid overflow
         val aj = java.math.BigInteger(s, 16)
         val bk = BigInteger.valueOf(t)
         val bj = java.math.BigInteger(t, 16)
@@ -62,7 +62,7 @@ class JvmBigIntegerTest {
     fun timesDifferentSign() {
         val s = "-4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B"
         val t = "4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B"
-        val ak = BigInteger.valueOf(s) + BigInteger(UIntArray(40)) // Increase the precision to avoid overflow
+        val ak = BigInteger.valueOf(s) + BigInteger.valueOf(UIntArray(40)) // Increase the precision to avoid overflow
         val aj = java.math.BigInteger(s, 16)
         val bk = BigInteger.valueOf(t)
         val bj = java.math.BigInteger(t, 16)

@@ -306,4 +306,127 @@ class BigIntegerTest {
         throw AssertionError("Failed")
     }
 
+    @Test
+    fun compare() {
+        val a = BigInteger.valueOf(4)
+        val b = BigInteger.valueOf(2)
+        assertEquals(1, a.compareTo(b))
+    }
+
+    @Test
+    fun compareEqual() {
+        val a = BigInteger.valueOf(5)
+        val b = BigInteger.valueOf(5)
+        assertEquals(0, a.compareTo(b))
+    }
+
+    @Test
+    fun compareEqualHighPrecision() {
+        val a = BigInteger.valueOf(5) + BigInteger.valueOf(UIntArray(15))
+        val b = BigInteger.valueOf(5)
+        assertEquals(0, a.compareTo(b))
+    }
+
+    @Test
+    fun compareEqualNegative() {
+        val a = BigInteger.valueOf(-23)
+        val b = BigInteger.valueOf(-23)
+        assertEquals(0, a.compareTo(b))
+    }
+
+    @Test
+    fun compareEqualNegativeHighPrecision() {
+        val a = BigInteger.valueOf(-23) + BigInteger.valueOf(UIntArray(15))
+        val b = BigInteger.valueOf(-23)
+        assertEquals(0, a.compareTo(b))
+    }
+
+    @Test
+    fun compareEqualZero() {
+        val a = BigInteger.valueOf(0)
+        val b = BigInteger.valueOf(0)
+        assertEquals(0, a.compareTo(b))
+    }
+
+    @Test
+    fun compareEqualZeroHighPrecision() {
+        val a = BigInteger.valueOf(UIntArray(15))
+        val b = BigInteger.valueOf(0)
+        assertEquals(0, a.compareTo(b))
+    }
+
+    @Test
+    fun compareEqualBigNumber() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B")
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B")
+        assertEquals(0, a.compareTo(b))
+    }
+
+    @Test
+    fun compareEqualBigNumberHighPrecisionFirst() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B") + BigInteger.valueOf(
+            UIntArray(15)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B")
+        assertEquals(0, a.compareTo(b))
+    }
+
+    @Test
+    fun compareEqualBigNumberHighPrecisionSecond() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B")
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B") + BigInteger.valueOf(
+            UIntArray(15)
+        )
+        assertEquals(0, a.compareTo(b))
+    }
+
+    @Test
+    fun compareBigNumberSecondGreater() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B")
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0C")
+        assertEquals(-1, a.compareTo(b))
+    }
+
+    @Test
+    fun compareBigNumberFirstGreater() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D")
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0C")
+        assertEquals(1, a.compareTo(b))
+    }
+
+    @Test
+    fun compareBigNumberSecondGreaterHighPrecisionFirst() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B") + BigInteger.valueOf(
+            UIntArray(15)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0C")
+        assertEquals(-1, a.compareTo(b))
+    }
+
+    @Test
+    fun compareBigNumberFirstGreaterHighPrecisionFirst() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D") + BigInteger.valueOf(
+            UIntArray(15)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0C")
+        assertEquals(1, a.compareTo(b))
+    }
+
+    @Test
+    fun compareBigNumberSecondGreaterHighPrecisionSecond() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B")
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0C") + BigInteger.valueOf(
+            UIntArray(15)
+        )
+        assertEquals(-1, a.compareTo(b))
+    }
+
+    @Test
+    fun compareBigNumberFirstGreaterHighPrecisionSecond() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D")
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0C") + BigInteger.valueOf(
+            UIntArray(15)
+        )
+        assertEquals(1, a.compareTo(b))
+    }
 }

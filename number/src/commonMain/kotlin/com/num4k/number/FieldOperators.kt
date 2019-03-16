@@ -147,7 +147,49 @@ object FieldOperators {
         return 0
     }
 
-    fun multiplicativeInverses(a: UIntArray, size: Int): UIntArray = UIntArray(size)
+    fun compareTo(first: UIntArray, second: UIntArray): Int {
+        val firstSign = first.compareToZero()
+        val secondSign = second.compareToZero()
+        return when {
+            firstSign > 0 && secondSign < 0 -> 1
+            firstSign < 0 && secondSign > 0 -> -1
+            firstSign > 0 && secondSign == 0 -> 1
+            firstSign < 0 && secondSign == 0 -> -1
+            firstSign == 0 && secondSign < 0 -> 1
+            firstSign == 0 && secondSign > 0 -> -1
+            firstSign == 0 && secondSign == 0 -> 0
+            else -> {
+                val condition = first.size >= second.size
+                val bigger = if (condition) first else second
+                val smaller = (if (condition) second else first).let { smaller ->
+                    if (smaller.compareToZero() < 0) {
+                        smaller.additiveInverses().additiveInverses(bigger.size)
+                    } else {
+                        UIntArray(bigger.size) { index ->
+                            if (index < smaller.size) {
+                                smaller[index]
+                            } else {
+                                0u
+                            }
+                        }
+                    }
+                }
+                run {
+                    bigger.reversed().forEachIndexed { index, v ->
+                        val u = smaller[smaller.size - 1 - index]
+                        if (v > u) {
+                            return@run if (condition) 1 else -1
+                        } else if (u > v) {
+                            return@run if (condition) -1 else 1
+                        }
+                    }
+                    0
+                }
+            }
+        }
+    }
+
+    fun multiplicativeInverses(@Suppress("UNUSED_PARAMETER") a: UIntArray, size: Int): UIntArray = UIntArray(size)
 
     fun timesInteger(first: UIntArray, second: UIntArray): UIntArray {
         val condition = first.size >= second.size
@@ -199,4 +241,5 @@ object FieldOperators {
     fun divInteger(first: UIntArray, second: UIntArray): UIntArray {
         TODO()
     }
+
 }

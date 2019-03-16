@@ -25,4 +25,7 @@ fun UIntArray.integerToString() = FieldOperators.integerToString(this)
 fun UIntArray.compareToZero() = FieldOperators.compareToZero(this)
 
 @ExperimentalUnsignedTypes
+fun UIntArray.compareTo(other: UIntArray) = FieldOperators.compareTo(this, other)
+
+@ExperimentalUnsignedTypes
 fun UInt.integerToString() = FieldOperators.integerToString(this)
