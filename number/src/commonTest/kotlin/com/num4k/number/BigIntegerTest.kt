@@ -247,6 +247,18 @@ class BigIntegerTest {
     }
 
     @Test
+    fun timesOverflow() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D")
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4")
+        try {
+            a * b
+        } catch (ignore: ArithmeticException) {
+            return
+        }
+        throw AssertionError("Failed")
+    }
+
+    @Test
     fun timesMinOverflow() {
         val a = BigInteger.valueOf(Int.MIN_VALUE)
         val b = BigInteger.valueOf(2)
@@ -428,5 +440,140 @@ class BigIntegerTest {
             UIntArray(15)
         )
         assertEquals(1, a.compareTo(b))
+    }
+
+    @Test
+    fun division() {
+        val a = BigInteger.valueOf(8)
+        val b = BigInteger.valueOf(4)
+        val c = a / b
+        assertEquals(BigInteger.valueOf(2), c)
+    }
+
+    @Test
+    fun divisionNegative() {
+        val a = BigInteger.valueOf(10)
+        val b = BigInteger.valueOf(-5)
+        val c = a / b
+        assertEquals(BigInteger.valueOf(-2), c)
+    }
+
+    @Test
+    fun divisionNegativeBoth() {
+        val a = BigInteger.valueOf(-10)
+        val b = BigInteger.valueOf(-5)
+        val c = a / b
+        assertEquals(BigInteger.valueOf(2), c)
+    }
+
+    @Test
+    fun divisionUnit() {
+        val a = BigInteger.valueOf(-10)
+        val b = BigInteger.valueOf(-10)
+        val c = a / b
+        assertEquals(BigInteger.valueOf(1), c)
+    }
+
+    @Test
+    fun longDivision() {
+        val a = BigInteger.valueOf(8L)
+        val b = BigInteger.valueOf(4L)
+        val c = a / b
+        assertEquals(BigInteger.valueOf(2), c)
+    }
+
+    @Test
+    fun longDivisionNegative() {
+        val a = BigInteger.valueOf(10L)
+        val b = BigInteger.valueOf(-5L)
+        val c = a / b
+        assertEquals(BigInteger.valueOf(-2), c)
+    }
+
+    @Test
+    fun longDivisionNegativeBoth() {
+        val a = BigInteger.valueOf(-10L)
+        val b = BigInteger.valueOf(-5L)
+        val c = a / b
+        assertEquals(BigInteger.valueOf(2), c)
+    }
+
+    @Test
+    fun longDivisionUnit() {
+        val a = BigInteger.valueOf(-10L)
+        val b = BigInteger.valueOf(-10L)
+        val c = a / b
+        assertEquals(BigInteger.valueOf(1), c)
+    }
+
+    @Test
+    fun divisionBigNumberUnit() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D")
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D")
+        assertEquals(BigInteger.valueOf(1), a / b)
+    }
+
+    @Test
+    fun divisionBigNumberUnitNegative() {
+        val a = BigInteger.valueOf("-4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D")
+        val b = BigInteger.valueOf("-4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D")
+        assertEquals(BigInteger.valueOf(1), a / b)
+    }
+
+    @Test
+    fun divisionDivideBySmaller() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4") + BigInteger.valueOf(UIntArray(4))
+        val b = BigInteger.valueOf("4456A")
+        val c = a * b
+        assertEquals(a, c / b)
+    }
+
+    @Test
+    fun divisionDivideByBigger() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4") + BigInteger.valueOf(UIntArray(4))
+        val b = BigInteger.valueOf("4456A")
+        val c = a * b
+        assertEquals(b, c / a)
+    }
+
+    @Test
+    fun divisionBigNumberDivideBySmaller() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4")
+        val c = a * b
+        assertEquals(b, c / a)
+    }
+
+    @Test
+    fun divisionBigNumberDivideByBigger() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4")
+        val c = a * b
+        val d = c / b
+        assertEquals(a, d)
+    }
+
+    @Test
+    fun divisionBigNumberDivideBySmallerWithReminder() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4")
+        val c = a * b + BigInteger.valueOf(100) // Reminder
+        assertEquals(b, c / a)
+    }
+
+    @Test
+    fun divisionBigNumberDivideByBiggerWithReminder() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4")
+        val c = a * b + BigInteger.valueOf(100) // Reminder
+        assertEquals(a, c / b)
     }
 }

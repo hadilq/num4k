@@ -11,10 +11,10 @@ class BigIntegerImpl(
     override val multiplicativeIdentity: BigInteger
         get() = BigInteger.valueOf(1)
 
-    override fun additiveInverses(): BigIntegerImpl = BigIntegerImpl(FieldOperators.additiveInverses(value, value.size))
+    override fun additiveInverse(): BigIntegerImpl = BigIntegerImpl(value.additiveInverse(value.size))
 
-    override fun multiplicativeInverses(): BigIntegerImpl =
-        BigIntegerImpl(FieldOperators.multiplicativeInverses(value, value.size))
+    override fun multiplicativeInverse(): BigIntegerImpl =
+        BigIntegerImpl(value.multiplicativeInverse(value.size))
 
     override fun times(o: BigInteger): BigIntegerImpl = BigIntegerImpl(value.timesInteger(o.value))
 

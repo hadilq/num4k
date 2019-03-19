@@ -9,6 +9,6 @@ interface Field<F> {
     operator fun times(o: F): F
     operator fun div(o: F): F
 
-    fun additiveInverses(): F
-    fun multiplicativeInverses(): F
+    fun additiveInverse(): F
+    fun multiplicativeInverse(): F
 }

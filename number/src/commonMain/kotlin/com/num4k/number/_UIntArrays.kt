@@ -13,10 +13,13 @@ fun UIntArray.timesInteger(o: UIntArray) = FieldOperators.timesInteger(this, o)
 fun UIntArray.divInteger(o: UIntArray) = FieldOperators.divInteger(this, o)
 
 @ExperimentalUnsignedTypes
-fun UIntArray.additiveInverses() = FieldOperators.additiveInverses(this)
+fun UIntArray.additiveInverse() = FieldOperators.additiveInverses(this)
 
 @ExperimentalUnsignedTypes
-fun UIntArray.additiveInverses(size: Int) = FieldOperators.additiveInverses(this, size)
+fun UIntArray.additiveInverse(size: Int) = FieldOperators.additiveInverses(this, size)
+
+@ExperimentalUnsignedTypes
+fun UIntArray.multiplicativeInverse(size: Int) = FieldOperators.multiplicativeInverse(this, size)
 
 @ExperimentalUnsignedTypes
 fun UIntArray.integerToString() = FieldOperators.integerToString(this)

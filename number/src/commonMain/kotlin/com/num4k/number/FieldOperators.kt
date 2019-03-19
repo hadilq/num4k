@@ -13,7 +13,7 @@ object FieldOperators {
         val bigger = if (condition) first else second
         val smaller = (if (condition) second else first).let {
             if (it.compareToZero() < 0) {
-                it.additiveInverses().additiveInverses(bigger.size)
+                it.additiveInverse().additiveInverse(bigger.size)
             } else {
                 it
             }
@@ -61,6 +61,15 @@ object FieldOperators {
         }.plusInteger(integerValueOf(1))
     }
 
+    fun integerValueOf(i: UInt): UIntArray {
+        return UIntArray(2) { index ->
+            when (index) {
+                0 -> i
+                else -> 0u
+            }
+        }
+    }
+
     fun integerValueOf(i: Int): UIntArray {
         val array = UIntArray(1)
         array[0] = i.toUInt()
@@ -101,13 +110,13 @@ object FieldOperators {
             result += u
         }
         val unsigned = result.toUIntArray()
-        return if (sign) unsigned else unsigned.additiveInverses()
+        return if (sign) unsigned else unsigned.additiveInverse()
     }
 
     fun integerToString(a: UIntArray): String {
         var aa = a
         val sign = if (a.compareToZero() < 0) {
-            aa = a.additiveInverses()
+            aa = a.additiveInverse()
             false
         } else {
             true
@@ -163,7 +172,7 @@ object FieldOperators {
                 val bigger = if (condition) first else second
                 val smaller = (if (condition) second else first).let { smaller ->
                     if (smaller.compareToZero() < 0) {
-                        smaller.additiveInverses().additiveInverses(bigger.size)
+                        smaller.additiveInverse().additiveInverse(bigger.size)
                     } else {
                         smaller
                     }
@@ -183,11 +192,12 @@ object FieldOperators {
     }
 
     fun equalsInteger(first: UIntArray, second: UIntArray): Boolean {
+        // TODO it should use compareTo method
         val bigger = if (first.size > second.size) first else second
         var smaller = if (first.size > second.size) second else first
 
         if (smaller.compareToZero() < 0) {
-            smaller = smaller.additiveInverses().additiveInverses(bigger.size)
+            smaller = smaller.additiveInverse().additiveInverse(bigger.size)
         }
 
         (0 until smaller.size).forEach { index ->
@@ -201,7 +211,7 @@ object FieldOperators {
         return true
     }
 
-    fun multiplicativeInverses(a: UIntArray, size: Int): UIntArray = when {
+    fun multiplicativeInverse(a: UIntArray, size: Int): UIntArray = when {
         a.equalsInteger(integerValueOf(0)) -> throw ArithmeticException("Division of one by zero")
         a.equalsInteger(integerValueOf(1)) -> integerValueOf(1).plusInteger(UIntArray(size))
         else -> UIntArray(size)
@@ -212,7 +222,7 @@ object FieldOperators {
         val bigger = if (condition) first else second
         val smaller = (if (condition) second else first).let {
             if (it.compareToZero() < 0) {
-                it.additiveInverses().additiveInverses(bigger.size)
+                it.additiveInverse().additiveInverse(bigger.size)
             } else {
                 it
             }
@@ -232,6 +242,7 @@ object FieldOperators {
                 }
             }
 
+            // TODO avoid creating new array
             sumDigits = sumDigits.plusInteger(multiDigits)
             (0 until bigger.size).forEach { index -> multiDigits[index] = 0u }
             carry = 0uL
@@ -250,12 +261,80 @@ object FieldOperators {
                         "with $carry carry"
             )
         }
+        val biggerOrder = bigger.order()
+        val smallerOrder = smaller.order()
+        val resultOrder = sumDigits.order()
+        if (resultOrder < biggerOrder + smallerOrder) {
+            throw ArithmeticException(
+                "Overflow on multiplying on ${bigger.integerToString()} and ${smaller.integerToString()} " +
+                        "with $carry carry, $biggerOrder, $smallerOrder and $resultOrder orders"
+            )
+        }
 
         return sumDigits
     }
 
+    private fun UIntArray.order(): Int = (if (compareToZero() >= 0) this else additiveInverse()).run {
+        size - 1 - reversed().indexOfFirst { it != 0u }
+    }
+
     fun divInteger(first: UIntArray, second: UIntArray): UIntArray {
-        TODO()
+        var a = first
+        val firstSign = if (first.compareToZero() < 0) {
+            a = a.additiveInverse()
+            false
+        } else {
+            true
+        }
+        var b = second
+        val secondSign = if (second.compareToZero() < 0) {
+            b = b.additiveInverse()
+            false
+        } else {
+            true
+        }
+        val resultSign: Boolean = !(firstSign xor secondSign)
+        val max = max(a.size, b.size)
+        val aa = if (a.size == max) a else UIntArray(max) { index -> if (index < a.size) a[index] else 0u }
+        val bb = if (b.size == max) b else UIntArray(max) { index -> if (index < b.size) b[index] else 0u }
+
+        val result = UIntArray(max)
+
+        val aOrder = aa.order()
+        val bOrder = bb.order()
+        var reminder = UIntArray(max)
+        var t: UIntArray
+        var carry: ULong
+        var d: UInt
+        (0..aOrder).reversed().forEach { index ->
+            reminder shl 1
+            reminder[0] = aa[index]
+
+            carry = if (bOrder < reminder.size - 1) reminder[bOrder + 1].toULong() else 0uL
+            carry = carry shl 32
+            carry += reminder[bOrder]
+
+            d = (carry / bb[bOrder].toULong()).toUInt()
+
+            if (d != 0u) {
+                while (compareTo(run { t = integerValueOf(d).timesInteger(bb); t }, reminder) > 0) d--
+                reminder = reminder.minusInteger(t)
+            }
+
+            result shl 1
+            result[0] = d
+        }
+
+        return if (resultSign) result else result.additiveInverse()
+    }
+
+    /**
+     * Left to the direction of increasing indices
+     */
+    private infix fun UIntArray.shl(digitCount: Int) {
+        val u = this
+        (0 until u.size - digitCount).reversed().forEach { index -> u[index + digitCount] = u[index] }
+        (0 until digitCount).forEach { index -> u[index] = 0u }
     }
 
 }
