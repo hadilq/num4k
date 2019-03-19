@@ -45,7 +45,7 @@ kotlin {
     linuxX64()
 //    linuxArm32Hfp()
 //    linuxMips32()
-    linuxMipsel32()
+//    linuxMipsel32()
 //    androidNativeArm64()
     metadata {
         mavenPublication {
