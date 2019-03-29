@@ -37,16 +37,16 @@ kotlin {
 
     jvm()
     js()
-    // wasm32()
+     wasm32()
     iosArm64()
     iosX64()
     mingwX64()
     macosX64()
     linuxX64()
-//    linuxArm32Hfp()
-//    linuxMips32()
-//    linuxMipsel32()
-//    androidNativeArm64()
+    linuxArm32Hfp()
+    linuxMips32()
+    linuxMipsel32()
+    androidNativeArm64()
     metadata {
         mavenPublication {
             artifactId = "kotlin-extlib-metadata"
