@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/hadilq/num4k.svg?branch=master)](https://travis-ci.org/hadilq/num4k)
+[![CircleCI](https://circleci.com/gh/hadilq/num4k.svg?style=svg)](https://circleci.com/gh/hadilq/num4k)
 
 Num4K
 ===
