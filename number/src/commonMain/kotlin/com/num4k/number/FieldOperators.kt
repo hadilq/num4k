@@ -175,7 +175,7 @@ object FieldOperators {
                 val condition = first.size >= second.size
                 val bigger = if (condition) first else second
                 val smaller = (if (condition) second else first).let { smaller ->
-                    if (smaller.compareToZero() < 0) {
+                    if (smaller.size < bigger.size && smaller.compareToZero() < 0) {
                         smaller.additiveInverse().additiveInverse(bigger.size)
                     } else {
                         smaller
@@ -268,6 +268,7 @@ object FieldOperators {
     fun reminderInteger(first: UIntArray, second: UIntArray): UIntArray = first.divWithRemInteger(second).second
 
     fun divWithRemInteger(first: UIntArray, second: UIntArray): Pair<UIntArray, UIntArray> {
+        if (second.equalsInteger(integerValueOf(0))) throw ArithmeticException("Division of one by zero")
         var a = first
         val firstSign = if (first.compareToZero() < 0) {
             a = a.additiveInverse()
@@ -286,7 +287,6 @@ object FieldOperators {
         val max = max(a.size, b.size)
         val aa = if (a.size == max) a else UIntArray(max) { index -> if (index < a.size) a[index] else 0u }
         val bb = if (b.size == max) b else UIntArray(max) { index -> if (index < b.size) b[index] else 0u }
-        val bc = additiveInverses(bb)
 
         val result = UIntArray(max)
 
@@ -294,8 +294,13 @@ object FieldOperators {
         val bOrder = bb.order()
         var reminder = UIntArray(max)
         var t: UIntArray
+        var s: UIntArray
+        var v: Int
+        var u: Int
         var carry: ULong
         var d: UInt
+        var dMax: UInt
+        var dMin: UInt
         (0..aOrder).reversed().forEach { index ->
             reminder shl 1
             reminder[0] = aa[index]
@@ -304,15 +309,48 @@ object FieldOperators {
             carry = carry shl 32
             carry += reminder[bOrder]
 
-            d = (carry / bb[bOrder].toULong()).toUInt()
+            dMax = (carry / bb[bOrder].toULong()).toUInt()
 
-            if (d != 0u) {
+            if (dMax != 0u) {
+                t = integerValueOf(dMax).timesInteger(bb)
+                s = t.minusInteger(reminder)
+
+                if (s.compareToZero() > 0) {
+                    carry = if (bOrder < s.size - 1) s[bOrder + 1].toULong() else 0uL
+                    carry = carry shl 32
+                    carry += s[bOrder]
+
+                    dMin = dMax - (carry / bb[bOrder].toULong()).toUInt()
+                } else {
+                    dMin = dMax
+                }
+
+                d = dMin + (dMax - dMin) / 2u
                 t = integerValueOf(d).timesInteger(bb)
-                while (compareTo(t, reminder) > 0) {
-                    d--
-                    plusIntegerInternal(t, bc, t)
+                u = compareTo(t, reminder)
+                if (u > 0) {
+                    s = integerValueOf(d + 1u).timesInteger(bb)
+                    v = compareTo(s, reminder)
+                    while (!(v > 0 && u <= 0)) {
+                        if (v > 0 && u >= 0) {
+                            dMax = d
+                        } else if (v <= 0 && u < 0) {
+                            dMin = d
+                        }
+                        if (dMax <= dMin) {
+                            dMin--
+                            dMax = dMin
+                        }
+                        d = dMin + (dMax - dMin) / 2u
+                        t = integerValueOf(d).timesInteger(bb)
+                        u = compareTo(t, reminder)
+                        s = integerValueOf(d + 1u).timesInteger(bb)
+                        v = compareTo(s, reminder)
+                    }
                 }
                 reminder = reminder.minusInteger(t)
+            } else {
+                d = 0u
             }
 
             result shl 1
