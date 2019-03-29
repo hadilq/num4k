@@ -195,25 +195,7 @@ object FieldOperators {
         }
     }
 
-    fun equalsInteger(first: UIntArray, second: UIntArray): Boolean {
-        // TODO it should use compareTo method
-        val bigger = if (first.size > second.size) first else second
-        var smaller = if (first.size > second.size) second else first
-
-        if (smaller.compareToZero() < 0) {
-            smaller = smaller.additiveInverse().additiveInverse(bigger.size)
-        }
-
-        (0 until smaller.size).forEach { index ->
-            if (smaller[index] != bigger[index]) return false
-        }
-
-        (smaller.size until bigger.size).forEach { index ->
-            if (bigger[index] != 0u) return false
-        }
-
-        return true
-    }
+    fun equalsInteger(first: UIntArray, second: UIntArray): Boolean = compareTo(first, second) == 0
 
     fun multiplicativeInverse(a: UIntArray, size: Int): UIntArray = when {
         a.equalsInteger(integerValueOf(0)) -> throw ArithmeticException("Division of one by zero")
@@ -246,7 +228,6 @@ object FieldOperators {
                 }
             }
 
-            // TODO avoid creating new array
             plusIntegerInternal(sumDigits, multiDigits, sumDigits)
             (0 until bigger.size).forEach { index -> multiDigits[index] = 0u }
             carry = 0uL
