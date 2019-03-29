@@ -558,13 +558,38 @@ class BigIntegerTest {
     }
 
     @Test
+    fun divisionBigNumberDivideBySmaller1() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4")
+        val reminder = BigInteger.valueOf(100)
+        val c = a * b + reminder
+        assertEquals(b, c / a)
+    }
+
+    @Test
+    fun divisionBigNumberDivideByBigger1() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4")
+        val reminder = BigInteger.valueOf(100)
+        val c = a * b + reminder
+        assertEquals(a, c / b)
+    }
+
+    @Test
     fun divisionBigNumberDivideBySmallerWithReminder() {
         val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0B4456A0D") + BigInteger.valueOf(
             UIntArray(30)
         )
         val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4")
-        val c = a * b + BigInteger.valueOf(100) // Reminder
-        assertEquals(b, c / a)
+        val reminder = BigInteger.valueOf(100)
+        val c = a * b + reminder
+        val d = c.divAndRem(a)
+        assertEquals(b, d.first)
+        assertEquals(reminder, d.second)
     }
 
     @Test
@@ -573,7 +598,63 @@ class BigIntegerTest {
             UIntArray(30)
         )
         val b = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4")
-        val c = a * b + BigInteger.valueOf(100) // Reminder
-        assertEquals(a, c / b)
+        val reminder = BigInteger.valueOf(100)
+        val c = a * b + reminder
+        val d = c.divAndRem(b)
+        assertEquals(a, d.first)
+        assertEquals(reminder, d.second)
     }
+
+    @Test
+    fun divisionBigNumberDivideBySmallerWithReminder1() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0BA0B4456A0B446A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0A0B4456A0B44A0B4")
+        val reminder = BigInteger.valueOf(100)
+        val c = a * b + reminder
+        val d = c.divAndRem(a)
+        assertEquals(b, d.first)
+        assertEquals(reminder, d.second)
+    }
+
+    @Test
+    fun divisionBigNumberDivideByBiggerWithReminder1() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B445A0B4456A0B44B4456A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0BA0B4456A0B44A0B4")
+        val reminder = BigInteger.valueOf(100)
+        val c = a * b + reminder
+        val d = c.divAndRem(b)
+        assertEquals(a, d.first)
+        assertEquals(reminder, d.second)
+    }
+
+    @Test
+    fun divisionBigNumberDivideBySmallerWithReminder2() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B4456A0BA0B4456A0B446A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0B4456A0A0B4456A0B44A0B4")
+        val reminder = BigInteger.valueOf("4456A0B4456A0B4456")
+        val c = a * b + reminder
+        val d = c.divAndRem(a)
+        assertEquals(b, d.first)
+        assertEquals(reminder, d.second)
+    }
+
+    @Test
+    fun divisionBigNumberDivideByBiggerWithReminder2() {
+        val a = BigInteger.valueOf("4456A0B4456A0B4456A0B4456A0B4456A0B445A0B4456A0B44B4456A0D") + BigInteger.valueOf(
+            UIntArray(30)
+        )
+        val b = BigInteger.valueOf("4456A0B4456A0BA0B4456A0B44A0B4")
+        val reminder = BigInteger.valueOf("0BA0B4456A0B4")
+        val c = a * b + reminder
+        val d = c.divAndRem(b)
+        assertEquals(a, d.first)
+        assertEquals(reminder, d.second)
+    }
+
 }

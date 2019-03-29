@@ -7,6 +7,10 @@ abstract class BigInteger(
 
     abstract fun toString(radix: Int): String
 
+    abstract operator fun rem(o: BigInteger): BigInteger
+
+    abstract fun divAndRem(o: BigInteger): Pair<BigIntegerImpl, BigIntegerImpl>
+
     companion object {
         fun valueOf(i: Int): BigInteger = BigIntegerImpl(FieldOperators.integerValueOf(i))
 

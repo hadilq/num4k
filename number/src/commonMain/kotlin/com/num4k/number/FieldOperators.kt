@@ -263,7 +263,11 @@ object FieldOperators {
         size - 1 - reversed().indexOfFirst { it != 0u }
     }
 
-    fun divInteger(first: UIntArray, second: UIntArray): UIntArray {
+    fun divInteger(first: UIntArray, second: UIntArray): UIntArray = first.divWithRemInteger(second).first
+
+    fun reminderInteger(first: UIntArray, second: UIntArray): UIntArray = first.divWithRemInteger(second).second
+
+    fun divWithRemInteger(first: UIntArray, second: UIntArray): Pair<UIntArray, UIntArray> {
         var a = first
         val firstSign = if (first.compareToZero() < 0) {
             a = a.additiveInverse()
@@ -282,6 +286,7 @@ object FieldOperators {
         val max = max(a.size, b.size)
         val aa = if (a.size == max) a else UIntArray(max) { index -> if (index < a.size) a[index] else 0u }
         val bb = if (b.size == max) b else UIntArray(max) { index -> if (index < b.size) b[index] else 0u }
+        val bc = additiveInverses(bb)
 
         val result = UIntArray(max)
 
@@ -302,7 +307,11 @@ object FieldOperators {
             d = (carry / bb[bOrder].toULong()).toUInt()
 
             if (d != 0u) {
-                while (compareTo(run { t = integerValueOf(d).timesInteger(bb); t }, reminder) > 0) d--
+                t = integerValueOf(d).timesInteger(bb)
+                while (compareTo(t, reminder) > 0) {
+                    d--
+                    plusIntegerInternal(t, bc, t)
+                }
                 reminder = reminder.minusInteger(t)
             }
 
@@ -310,7 +319,7 @@ object FieldOperators {
             result[0] = d
         }
 
-        return if (resultSign) result else result.additiveInverse()
+        return Pair(if (resultSign) result else result.additiveInverse(), reminder)
     }
 
     /**

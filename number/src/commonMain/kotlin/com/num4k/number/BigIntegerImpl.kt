@@ -20,6 +20,13 @@ class BigIntegerImpl(
 
     override fun div(o: BigInteger): BigIntegerImpl = BigIntegerImpl(value.divInteger(o.value))
 
+    override fun rem(o: BigInteger): BigIntegerImpl = BigIntegerImpl(value.reminderInteger(o.value))
+
+    override fun divAndRem(o: BigInteger): Pair<BigIntegerImpl, BigIntegerImpl> =
+        (value.divWithRemInteger(o.value)).run {
+            Pair(BigIntegerImpl(first), BigIntegerImpl(second))
+        }
+
     override fun minus(o: BigInteger): BigIntegerImpl = BigIntegerImpl(value.minusInteger(o.value))
 
     override fun plus(o: BigInteger): BigIntegerImpl = BigIntegerImpl(value.plusInteger(o.value))
