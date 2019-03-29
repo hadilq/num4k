@@ -19,6 +19,11 @@ object FieldOperators {
             }
         }
         val digits = UIntArray(bigger.size)
+        plusIntegerInternal(bigger, smaller, digits)
+        return digits
+    }
+
+    private fun plusIntegerInternal(bigger: UIntArray, smaller: UIntArray, digits: UIntArray) {
         var carry = 0uL
         bigger.forEachIndexed { index, v ->
             carry += v.toULong() + if (index >= smaller.size) {
@@ -40,7 +45,6 @@ object FieldOperators {
                         "with $carry carry and the sign of result is $resultSign"
             )
         }
-        return digits
     }
 
     fun minusInteger(first: UIntArray, second: UIntArray): UIntArray =
@@ -61,7 +65,7 @@ object FieldOperators {
         }.plusInteger(integerValueOf(1))
     }
 
-    fun integerValueOf(i: UInt): UIntArray {
+    private fun integerValueOf(i: UInt): UIntArray {
         return UIntArray(2) { index ->
             when (index) {
                 0 -> i
@@ -228,7 +232,7 @@ object FieldOperators {
             }
         }
         val multiDigits = UIntArray(bigger.size)
-        var sumDigits = UIntArray(bigger.size)
+        val sumDigits = UIntArray(bigger.size)
         var carry = 0uL
         smaller.forEachIndexed { si, v ->
             run multiply@{
@@ -243,7 +247,7 @@ object FieldOperators {
             }
 
             // TODO avoid creating new array
-            sumDigits = sumDigits.plusInteger(multiDigits)
+            plusIntegerInternal(sumDigits, multiDigits, sumDigits)
             (0 until bigger.size).forEach { index -> multiDigits[index] = 0u }
             carry = 0uL
         }
