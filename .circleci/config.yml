@@ -1,0 +1,12 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:latest
+    environment:
+      - JVM_OPTS: -Xmx3072m
+    steps:
+      - checkout
+      - run:
+          name: Build and check
+          command: ./gradlew clean check

@@ -37,7 +37,7 @@ kotlin {
 
     jvm()
     js()
-    // wasm32()
+     wasm32()
     iosArm64()
     iosX64()
     mingwX64()
