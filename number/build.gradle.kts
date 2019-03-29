@@ -147,3 +147,66 @@ val KotlinMultiplatformExtension.androidTargets
             KonanTarget.ANDROID_ARM64
         ).any { target -> it.konanTarget == target }
     }
+
+val keyId = System.getenv()["SIGNING_KEYID"]
+    ?: extra.getOrNull("signing.keyId") as String?
+val gpgPassword = System.getenv()["SIGNING_PASSWORD"]
+    ?: extra.getOrNull("signing.password") as String?
+val gpgFile = System.getenv()["SIGNING_SECRETRINGFILE"]
+    ?: extra.getOrNull("signing.secretKeyRingFile") as String?
+    ?: if(file("./secret.gpg").exists()) file("./secret.gpg").absolutePath else null
+val ossrhUsername = System.getenv()["OSSRHUSERNAME"]
+    ?: extra.getOrNull("ossrhUsername") as String?
+val ossrhPassword = System.getenv()["OSSRHPASSWORD"]
+    ?: extra.getOrNull("ossrhPassword") as String?
+
+if (listOf(
+        keyId,
+        gpgPassword,
+        gpgFile,
+        ossrhUsername,
+        ossrhPassword
+    ).none { it == null } && file(gpgFile!!).exists()
+) {
+
+    println("Publishing setup detected. Setting up publishing...")
+
+    val javadocJar by tasks.creating(Jar::class) {
+        archiveClassifier.value("javadoc")
+        // TODO: instead of a single empty Javadoc JAR, generate real documentation for each module
+    }
+
+    val sourcesJar by tasks.creating(Jar::class) {
+        archiveClassifier.value("sources")
+    }
+
+    extra["signing.keyId"] = keyId
+    extra["signing.password"] = gpgPassword
+    extra["signing.secretKeyRingFile"] = gpgFile
+
+    publishing {
+        publications {
+            configure(withType<MavenPublication>()) {
+                signing.sign(this)
+                customizeForMavenCentral(pom)
+                artifact(javadocJar)
+            }
+            withType<MavenPublication>()["kotlinMultiplatform"].artifact(sourcesJar)
+        }
+        repositories {
+            maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
+                .credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+        }
+    }
+} else println(buildString {
+    appendln("Not enough informatio+n to publish:")
+    appendln("keyId: ${if (keyId == null) "NOT " else ""}found")
+    appendln("gpgPassword: ${if (gpgPassword == null) "NOT " else ""}found")
+    appendln("gpgFile: ${gpgFile ?: "NOT found"}")
+    appendln("gpgFile presence: ${gpgFile?.let { file(it).exists() } ?: "false"}")
+    appendln("ossrhUsername: ${if (ossrhUsername == null) "NOT " else ""}found")
+    appendln("ossrhPassword: ${if (ossrhPassword == null) "NOT " else ""}found")
+})

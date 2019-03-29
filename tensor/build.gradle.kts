@@ -108,6 +108,45 @@ kotlin {
     }
 }
 
+fun KotlinNativeTarget.compilations(name: String, config: KotlinNativeCompilation.() -> Unit) =
+    compilations[name].apply(config)
+
+val KotlinMultiplatformExtension.nativeTargets
+    get() = targets.filter { it is KotlinNativeTarget }.map { it as KotlinNativeTarget }
+
+val KotlinMultiplatformExtension.platformIndependentTargets
+    get() = targets.filter { it !is KotlinNativeTarget || it.konanTarget == KonanTarget.WASM32 }
+
+val KotlinMultiplatformExtension.appleTargets
+    get() = targets.filter {
+        it is KotlinNativeTarget && listOf(
+            KonanTarget.IOS_ARM64,
+            KonanTarget.IOS_X64,
+            KonanTarget.MACOS_X64
+        ).any { target -> it.konanTarget == target }
+    }
+
+val KotlinMultiplatformExtension.windowsTargets
+    get() = targets.filter { it is KotlinNativeTarget && it.konanTarget == KonanTarget.MINGW_X64 }
+
+val KotlinMultiplatformExtension.linuxTargets
+    get() = targets.filter {
+        it is KotlinNativeTarget && listOf(
+            KonanTarget.LINUX_ARM32_HFP,
+            KonanTarget.LINUX_MIPS32,
+            KonanTarget.LINUX_MIPSEL32,
+            KonanTarget.LINUX_X64
+        ).any { target -> it.konanTarget == target }
+    }
+
+val KotlinMultiplatformExtension.androidTargets
+    get() = targets.filter {
+        it is KotlinNativeTarget && listOf(
+            KonanTarget.ANDROID_ARM32,
+            KonanTarget.ANDROID_ARM64
+        ).any { target -> it.konanTarget == target }
+    }
+
 val keyId = System.getenv()["SIGNING_KEYID"]
     ?: extra.getOrNull("signing.keyId") as String?
 val gpgPassword = System.getenv()["SIGNING_PASSWORD"]
@@ -170,42 +209,3 @@ if (listOf(
     appendln("ossrhUsername: ${if (ossrhUsername == null) "NOT " else ""}found")
     appendln("ossrhPassword: ${if (ossrhPassword == null) "NOT " else ""}found")
 })
-
-fun KotlinNativeTarget.compilations(name: String, config: KotlinNativeCompilation.() -> Unit) =
-    compilations[name].apply(config)
-
-val KotlinMultiplatformExtension.nativeTargets
-    get() = targets.filter { it is KotlinNativeTarget }.map { it as KotlinNativeTarget }
-
-val KotlinMultiplatformExtension.platformIndependentTargets
-    get() = targets.filter { it !is KotlinNativeTarget || it.konanTarget == KonanTarget.WASM32 }
-
-val KotlinMultiplatformExtension.appleTargets
-    get() = targets.filter {
-        it is KotlinNativeTarget && listOf(
-            KonanTarget.IOS_ARM64,
-            KonanTarget.IOS_X64,
-            KonanTarget.MACOS_X64
-        ).any { target -> it.konanTarget == target }
-    }
-
-val KotlinMultiplatformExtension.windowsTargets
-    get() = targets.filter { it is KotlinNativeTarget && it.konanTarget == KonanTarget.MINGW_X64 }
-
-val KotlinMultiplatformExtension.linuxTargets
-    get() = targets.filter {
-        it is KotlinNativeTarget && listOf(
-            KonanTarget.LINUX_ARM32_HFP,
-            KonanTarget.LINUX_MIPS32,
-            KonanTarget.LINUX_MIPSEL32,
-            KonanTarget.LINUX_X64
-        ).any { target -> it.konanTarget == target }
-    }
-
-val KotlinMultiplatformExtension.androidTargets
-    get() = targets.filter {
-        it is KotlinNativeTarget && listOf(
-            KonanTarget.ANDROID_ARM32,
-            KonanTarget.ANDROID_ARM64
-        ).any { target -> it.konanTarget == target }
-    }
